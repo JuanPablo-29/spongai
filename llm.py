@@ -72,7 +72,7 @@ class LLM:
         JSON:
         """
         response = ollama.generate(
-            model="mistral",
+            model="llama3.1:8b",
             prompt=prompt,
             options={
                 "temperature": 0,
