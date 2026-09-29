@@ -4,10 +4,12 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
 from speech_to_text import STT
 from text_to_speech import TTS
+from llm import LLM
 
 app = FastAPI()
 stt = STT()
 tts = TTS()
+
 
 @app.post("/transcribe")
 async def transcribe(audio: UploadFile = File(...)):
@@ -25,3 +27,8 @@ async def transcribe(audio: UploadFile = File(...)):
 async def speak(text: str = Form(...)):
     audio = tts.get_speech(text)
     return StreamingResponse(audio, media_type="audio/wav")
+
+@app.post("/chat")
+async def ask(text: str = Form(...)):
+    response = LLM.ask(text)
+    return response
