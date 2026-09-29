@@ -4,7 +4,7 @@ from kokoro import KPipeline
 import torch
 from rvc_python.infer import RVCInference # Pipeline wrapper
 
-class PerfectSpongeBobTTS:
+class SpongeTTS:
     def __init__(self):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.pipeline = KPipeline(lang_code = 'a', device = self.device)

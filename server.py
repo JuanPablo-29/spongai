@@ -5,10 +5,11 @@ from fastapi.responses import StreamingResponse
 from speech_to_text import STT
 from text_to_speech import TTS
 from query import Query
+from SpongeTTS import SpongeTTS
 
 app = FastAPI()
 stt = STT()
-tts = TTS()
+tts = SpongeTTS()
 llm = Query()
 
 @app.post("/transcribe")
