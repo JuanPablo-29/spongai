@@ -9,7 +9,7 @@ from llm import LLM
 app = FastAPI()
 stt = STT()
 tts = TTS()
-
+llm = LLM("llama3.1:8b", prompt_file="respond", remember=False, search=False)
 
 @app.post("/transcribe")
 async def transcribe(audio: UploadFile = File(...)):
@@ -30,5 +30,5 @@ async def speak(text: str = Form(...)):
 
 @app.post("/chat")
 async def ask(text: str = Form(...)):
-    response = LLM.ask(text)
+    response = llm.ask(text)
     return response
