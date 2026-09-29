@@ -9,7 +9,7 @@ from llm import LLM
 app = FastAPI()
 stt = STT()
 tts = TTS()
-llm = LLM("llama3.1:8b", prompt_file="respond", remember=False, search=False)
+llm = LLM("llama3.1:8b", prompt_file="respond", remember=20, search=False)
 
 @app.post("/transcribe")
 async def transcribe(audio: UploadFile = File(...)):

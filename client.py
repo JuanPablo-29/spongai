@@ -2,7 +2,9 @@ import sounddevice as sd
 import io
 import soundfile as sf
 import numpy as np
+import requests
 
+SERVER_URL = "http://100.93.202.120:8000"
 
 def record(samplerate=16000, chunk_duration=0.1, silence_threshold=500, silence_duration=1.5, max_duration=15):
     silence_chunks_needed = int(silence_duration / chunk_duration)
@@ -31,8 +33,13 @@ def record(samplerate=16000, chunk_duration=0.1, silence_threshold=500, silence_
     buffer.seek(0)
     return buffer
 
+def transcribe(buffer):
+    files = {"audio": ("recording.wav", buffer, "audio/wav")}
+    response = requests.post(f"{SERVER_URL}/transcribe", files = files)
+    response.raise_for_status()
+    return response.json()["text"]
+
 if __name__ == "__main__":
     buffer = record()
-    with open("test.wav", "wb") as f:
-        f.write(buffer.read())
-    print("Saved")
+    text = transcribe(buffer)
+    print(text)

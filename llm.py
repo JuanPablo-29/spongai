@@ -1,7 +1,7 @@
 from ddgs import DDGS
 import ollama
 class LLM:
-    def __init__(self, model, prompt_file, remember: bool, search: bool):
+    def __init__(self, model, prompt_file, remember: int, search: bool):
         self.memory = []
         self.model = model
         self.prompt = self.prompt_file(prompt_file)
@@ -20,11 +20,14 @@ class LLM:
             messages=messages
         )
         answer = response["message"]["content"]
-        if self.remember: self.add_memory(content, answer)
+        self.add_memory(content, answer)
         print(answer)
         return answer
 
     def add_memory(self, user, ai):
+        if self.memory.count > self.remember:
+            self.memory.pop(0)
+            self.memory.pop(0)
         self.memory.append({"role": "user", "content": user})
         self.memory.append({"role": "assistant", "content": ai})
 
@@ -50,7 +53,7 @@ class LLM:
             prompt=prompt
         )
         answer = response["response"]
-        if self.remember: self.add_memory(content, answer)
+        self.add_memory(content, answer)
         return answer
 
     def search(self, query, num_results=10):
