@@ -25,7 +25,7 @@ class LLM:
         return answer
 
     def add_memory(self, user, ai):
-        if self.memory.count > self.remember:
+        if len(self.memory) > self.remember:
             self.memory.pop(0)
             self.memory.pop(0)
         self.memory.append({"role": "user", "content": user})
