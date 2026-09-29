@@ -39,7 +39,30 @@ def transcribe(buffer):
     response.raise_for_status()
     return response.json()["text"]
 
+def chat(text):
+    data = {"message": text}
+    response = requests.post(f"{SERVER_URL}/chat", data=data)
+    response.raise_for_status()
+    return response.json()["response"]
+
+def speak(text):
+    data = {"text": text}
+    response = requests.post(f"{SERVER_URL}/speak", data=data)
+    response.raise_for_status()
+    return response.content
+
+
+def play_audio(audio_bytes):
+    data, samplerate = sf.read(io.BytesIO(audio_bytes))
+    sd.play(data, samplerate)
+    sd.wait
+
 if __name__ == "__main__":
     buffer = record()
     text = transcribe(buffer)
     print(text)
+    reply = chat(text)
+    print(reply)
+    audio_bytes = speak(reply)
+    play_audio(audio_bytes)
+    
