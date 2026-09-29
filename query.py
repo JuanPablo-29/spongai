@@ -5,6 +5,7 @@ class Query():
         self.llm = LLM("llama3.1:8b", "respond", 20)
 
     def main(self, q):
+        self.query = q
         return self.parse(self.llm.router_ask(self.query))
 
     def parse(self, result):
