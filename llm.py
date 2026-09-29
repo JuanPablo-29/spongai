@@ -1,12 +1,11 @@
 from ddgs import DDGS
 import ollama
 class LLM:
-    def __init__(self, model, prompt_file, remember: int, search: bool):
+    def __init__(self, model, prompt_file, remember: int):
         self.memory = []
         self.model = model
         self.prompt = self.prompt_file(prompt_file)
         self.remember = remember
-        self.do_search = search
     
     def ask(self, content):
         messages = []
