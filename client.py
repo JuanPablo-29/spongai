@@ -15,6 +15,9 @@ def record(samplerate=16000, chunk_duration=0.1, silence_threshold=500, silence_
         frames.append(chunk)
 
         volume = np.sqrt(np.mean(chunk.astype(np.float32) ** 2))
+
+        print(volume)
+
         if volume < silence_threshold:
             silent_count += 1
         else:
@@ -27,3 +30,9 @@ def record(samplerate=16000, chunk_duration=0.1, silence_threshold=500, silence_
     sf.write(buffer, audio, samplerate, format="WAV")
     buffer.seek(0)
     return buffer
+
+if __name__ == "__main__":
+    buffer = record()
+    with open("test.wav", "wb") as f:
+        f.write(buffer.read())
+    print("Saved")
