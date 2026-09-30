@@ -1,4 +1,5 @@
 import io
+import os
 import soundfile as sf
 from kokoro import KPipeline
 import torch
@@ -11,7 +12,7 @@ class SpongeTTS:
         
         # Initialize the local RVC model with pre-made weights
         self.rvc = RVCInference(device=self.device)
-        self.rvc.load_model("model.pth") 
+        self.rvc.load_model("weights/model.pth") 
 
     def get_speech(self, text: str) -> io.BytesIO:
         # 1. Generate clean, dry baseline speech using a default voice
@@ -31,3 +32,33 @@ class SpongeTTS:
             buffer = io.BytesIO(f.read())
             
         return buffer
+
+if __name__ == "__main__":
+    try:
+        print("Initializing SpongeTTS pipeline...")
+        tts = SpongeTTS()
+        
+        test_phrase = "I'm ready! I'm ready! Order up! One perfect Krabby Patty coming right up!"
+        print(f"\nProcessing test phrase: \"{test_phrase}\"")
+        
+        # Generate the audio stream buffer
+        audio_buffer = tts.get_speech(test_phrase)
+        
+        # Save the buffer stream contents locally to a permanent WAV file
+        output_filename = "test_spongebob.wav"
+        with open(output_filename, "wb") as f:
+            f.write(audio_buffer.getbuffer())
+            
+        print(f"\n🎉 Success! Open your directory and play: {output_filename}")
+        
+    except Exception as e:
+        print(f"\nAn error occurred during execution: {e}")
+        
+    finally:
+        # Clean up temporary disk files used by the inference engine loop
+        for temp_file in ["temp_base.wav", "temp_spongebob.wav"]:
+            if os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except Exception:
+                    pass
