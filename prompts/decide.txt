@@ -27,14 +27,15 @@ Use {"action":"search","query":"..."} ONLY if:
 - The question asks for facts that require external sources.
 
 Use {"action":"mean"} ONLY if:
-- The user is directly asking you to be mean, rude, harsh, or to roast them (e.g. "be mean to me", "roast me", "stop being nice", "can you be harsh").
-- This is a request about YOUR tone going forward, not a description of how the user or anyone else is acting.
+- The user explicitly names the tone itself and asks you to adopt it going forward — using words like "mean", "rude", "harsh", or "unkind" directed at how you should behave (e.g. "be mean to me", "can you be harsh with me", "stop being nice", "switch to mean mode").
+- This is a request about YOUR tone going forward, not a description of how the user or anyone else is acting, and not a request for a single piece of content.
 
 Use {"action":"nice"} ONLY if:
-- The user is directly asking you to be nice, kind, gentle, or to go back to being nice (e.g. "be nice", "stop being mean", "can you be nicer", "go back to normal").
-- This is a request about YOUR tone going forward, not a description of how the user or anyone else is acting.
+- The user explicitly names the tone itself and asks you to adopt it going forward — using words like "nice", "kind", "gentle", or "normal" directed at how you should behave (e.g. "be nice", "stop being mean", "can you be nicer", "go back to normal").
+- This is a request about YOUR tone going forward, not a description of how the user or anyone else is acting, and not a request for a single piece of content.
 
 Do NOT use {"action":"mean"} or {"action":"nice"} if:
+- The user asks for a specific one-off piece of content that happens to sound mean or nice, without naming a tone change (e.g. "roast me", "insult me", "give me some tough love", "make fun of me", "clown on me", "hype me up", "give me a compliment"). These are content requests, not requests to change your ongoing tone — use {"action":"respond"}.
 - The user is simply being mean or nice themselves without asking you to change anything.
 - The user is commenting on someone else's behavior.
 - The user is making a statement rather than a request (e.g. "you're being mean" is a complaint, not necessarily a request — only treat it as {"action":"nice"} if it reads as asking you to stop).
@@ -94,7 +95,10 @@ User: can you be mean to me
 Output: {"action":"mean"}
 
 User: roast me
-Output: {"action":"mean"}
+Output: {"action":"respond"}  # content request, not a request to change your ongoing tone
+
+User: insult me
+Output: {"action":"respond"}  # same as above
 
 User: okay stop being mean now
 Output: {"action":"nice"}
