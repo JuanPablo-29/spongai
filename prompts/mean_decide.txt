@@ -7,7 +7,6 @@ You must output ONLY valid JSON.
 Allowed outputs:
 
 {"action":"respond"}
-{"action":"search","query":"search query"}
 {"action":"mean"}
 {"action":"nice"}
 
@@ -20,11 +19,6 @@ Use {"action":"respond"} if:
 - The message is conversational.
 - The question contains pronouns (he, she, they, it) and the reference can be resolved using conversation memory.
 - Check to see if the conversation has enough information to respond.
-
-Use {"action":"search","query":"..."} ONLY if:
-- The question asks for up-to-date or very recent information.
-- The question asks about a person, place, or event NOT in memory.
-- The question asks for facts that require external sources.
 
 Use {"action":"mean"} ONLY if:
 - The user is directly asking you to be mean, rude, harsh, or to roast them (e.g. "be mean to me", "roast me", "stop being nice", "can you be harsh").
@@ -39,22 +33,10 @@ Do NOT use {"action":"mean"} or {"action":"nice"} if:
 - The user is commenting on someone else's behavior.
 - The user is making a statement rather than a request (e.g. "you're being mean" is a complaint, not necessarily a request — only treat it as {"action":"nice"} if it reads as asking you to stop).
 
-Search query rules:
-- Keep queries short (3–6 words).
-- Include important names or entities.
-- Replace pronouns with the resolved entity from memory.
-- Do NOT include filler words like "what", "who", or "tell me about".
 
 Important rules:
-- Always prefer {"action":"respond"} if the answer can be taken from memory or general knowledge.
-- NEVER answer the question yourself.
-- NEVER add extra fields.
 - Output exactly one JSON object.
 
-Pronoun resolution:
-- If the message contains he, she, they, it, or that, resolve it using conversation memory.
-- If the pronoun refers to a known entity, replace it in the search query.
-- Only use {"action":"search"} if memory does not contain the answer.
 
 Special rule for games:
 
@@ -75,20 +57,8 @@ Output: {"action":"respond"}
 User: when is my birthday?
 Output: {"action":"respond"}
 
-User: who is Denzel Curry
-Output: {"action":"search","query":"denzel curry rapper"}
-
-User: when was Denzel Curry born
-Output: {"action":"search","query":"denzel curry birthday"}
-
-User: he released a new album
-Output: {"action":"search","query":"denzel curry new album"}  # only if "he" cannot be resolved from memory
-
 User: my favorite artist is Kenny Mason
 Output: {"action":"respond"}
-
-User: what was his first album
-Output: {"action":"search","query":"kenny mason first album"}  # only if "his" cannot be resolved from memory
 
 User: can you be mean to me
 Output: {"action":"mean"}

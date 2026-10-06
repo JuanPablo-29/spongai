@@ -1,11 +1,13 @@
 from ddgs import DDGS
 import ollama
+### Want to make search togglable in the class
 class LLM:
     def __init__(self, model, prompt_file, remember: int):
         self.memory = []
         self.model = model
         self.prompt = self.prompt_file(prompt_file)
         self.remember = remember
+        self.mean = False
     
     def ask(self, content):
         messages = []
@@ -61,8 +63,8 @@ class LLM:
             response = "\n".join([r["title"] + ": " + r["body"] for r in results])
         return response
 
-    def router_ask(self, content):
-        prompt = f"""{self.prompt_file("decide")}
+    def router_ask(self, content, prompt_file="decide"):
+        prompt = f"""{self.prompt_file(prompt_file)}
 
         Conversation History:
         {self.memory}
@@ -80,3 +82,10 @@ class LLM:
             }
         )
         return response["response"].strip()
+    
+    def toggle_mean(self):
+        self.mean = not self.mean
+        if self.mean:
+            self.model = "llama2-uncensored:7b"
+        else:
+            self.model = "llama3.1:8b"
