@@ -3,12 +3,12 @@ import tempfile
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
 from speech_to_text import STT
-from text_to_speech import TTS
+from SpongeTTS import SpongeTTS
 from query import Query
 
 app = FastAPI()
 stt = STT()
-tts = TTS()
+tts = SpongeTTS()
 llm = Query()
 
 @app.post("/transcribe")
