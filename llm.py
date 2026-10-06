@@ -55,7 +55,7 @@ class LLM:
         self.add_memory(content, answer)
         return answer
 
-    def search(self, query, num_results=10):
+    def search(self, query, num_results=5):
         with DDGS() as ddgs:
             results = ddgs.text(query, max_results=num_results)
             response = "\n".join([r["title"] + ": " + r["body"] for r in results])
