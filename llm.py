@@ -87,5 +87,7 @@ class LLM:
         self.mean = not self.mean
         if self.mean:
             self.model = "llama2-uncensored:7b"
+            self.prompt = self.prompt_file("mean")
         else:
             self.model = "llama3.1:8b"
+            self.prompt = self.prompt_file("respond")
