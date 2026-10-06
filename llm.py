@@ -59,9 +59,13 @@ class LLM:
 
     def search(self, query, num_results=5):
         with DDGS() as ddgs:
-            results = ddgs.text(query, max_results=num_results)
-            response = "\n".join([r["title"] + ": " + r["body"] for r in results])
-        return response
+            try:
+                results = ddgs.text(query, max_results=num_results)
+                response = "\n".join([r["title"] + ": " + r["body"] for r in results])
+                return response
+            except Exception as e:
+                print(f"Search Exception Caught: {e}")
+                return "No search results found."
 
     def router_ask(self, content, prompt_file="decide"):
         prompt = f"""{self.prompt_file(prompt_file)}
