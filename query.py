@@ -16,7 +16,7 @@ class Query():
         if action == "search":
             search = data["query"]
             print("Searching...\n")
-            return self.llm.search_ask(self.query, search, 5)
+            return self.llm.search_ask(self.query, search, num_results=5)
         elif action == "respond":
             return self.llm.ask(self.query)
             
