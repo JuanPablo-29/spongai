@@ -40,7 +40,7 @@ def transcribe(buffer):
     return response.json()["text"]
 
 def chat(text):
-    data = {"message": text}
+    data = {"text": text}
     response = requests.post(f"{SERVER_URL}/chat", data=data)
     response.raise_for_status()
     return response.json()["response"]
