@@ -49,7 +49,7 @@ def speak(text):
     data = {"text": text}
     response = requests.post(f"{SERVER_URL}/speak", data=data)
     response.raise_for_status()
-    return response.content
+    return io.BytesIO(response.content)
 
 
 def play_audio(audio_bytes):
@@ -58,7 +58,7 @@ def play_audio(audio_bytes):
     sd.wait
 
 if __name__ == "__main__":
-    buffer = record()
+    buffer = record(chunk_duration=1, silence_duration=2)
     text = transcribe(buffer)
     print(text)
     reply = chat(text)
