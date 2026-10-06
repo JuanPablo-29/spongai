@@ -56,7 +56,7 @@ class SpongeTTS:
         
         # 2. FIXED: Use Kokoro's native sentence-splitting pattern execution block.
         # This keeps audio tensors small and clean, preventing RVC frame size mismatches.
-        generator = self.pipeline(animated_text, voice="af_heart", speed=1.3, split_pattern=r'[.!?\n]+')
+        generator = self.pipeline(animated_text, voice="am_adam", speed=1.3, split_pattern=r'[.!?\n]+')
         
         audio_segments = []
         for _, _, audio in generator:
