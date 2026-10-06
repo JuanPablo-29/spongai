@@ -31,19 +31,27 @@ class SpongeTTS:
 
     def _spongebobify_text(self, text: str) -> str:
         """
-        Helper that forces the local text-to-speech engine out of 'monotone reading mode'
-        by transforming punctuation, adding exclamation points, and emphasizing text.
+        Formats text to break the monotone delivery and patches pronunciation bugs.
         """
-        # Clean basic text formatting
         processed = text.strip()
         
-        # Turn periods into exclamation points to force enthusiastic speech inflection
-        processed = processed.replace(".", "!")
+        # --- PHONETIC PRONUNCIATION DICTIONARY ---
+        # Map words that the TTS engine mispronounces to their phonetic equivalents
+        pronunciation_patches = {
+            r"\bJuan\b": "Wahn",     # Forces "Juan" to be pronounced properly as "Wahn"
+            r"\bjuan\b": "Wahn",
+            # You can add other custom names or words here as you run into them:
+            # r"\bFastAPI\b": "Fast A P I",
+        }
         
-        # Make the words UPPERCASE so the underlying TTS voice engine shouts with energy
+        # Apply the phonetic patches using regex word boundaries
+        for pattern, replacement in pronunciation_patches.items():
+            processed = re.sub(pattern, replacement, processed)
+        
+        # Clean up punctuation and apply upper-case shouting for energy
+        processed = processed.replace(".", "!")
         processed = processed.upper()
         
-        # Add signature catchphrases if the sentence looks standard
         if not processed.endswith("!"):
             processed += "!"
             
