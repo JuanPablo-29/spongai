@@ -32,4 +32,4 @@ async def speak(text: str = Form(...)):
 @app.post("/chat")
 async def ask(text: str = Form(...)):
     response = llm.main(text)
-    return response
+    return {"response": response}
