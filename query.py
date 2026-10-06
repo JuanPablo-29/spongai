@@ -22,10 +22,12 @@ class Query():
         elif action == "respond":
             return self.llm.ask(self.query)
         elif action == "mean":
-            self.llm.toggle_mean()
+            if not self.llm.mean:
+                self.llm.toggle_mean()
             return self.llm.ask(self.query)
         elif action == "nice":
-            self.llm.toggle_mean()
+            if self.llm.mean:
+                self.llm.toggle_mean()
             return self.llm.ask(self.query)
 
 if __name__ == "__main__":       
