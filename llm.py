@@ -78,7 +78,7 @@ class LLM:
             prompt=prompt,
             options={
                 "temperature": 0,
-                "num_predict": 20
+                "num_predict": 60
             }
         )
         return response["response"].strip()
