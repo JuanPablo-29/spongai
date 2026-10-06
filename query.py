@@ -2,7 +2,7 @@ from llm import *
 import json
 class Query():
     def __init__(self):
-        self.llm = LLM("llama3.1:8b", "respond", 20)
+        self.llm = LLM("llama3.1:8b", "respond", 10)
 
     def main(self, q):
         self.query = q
