@@ -9,7 +9,7 @@ from SpongeTTS import SpongeTTS
 
 app = FastAPI()
 stt = STT()
-tts = SpongeTTS()
+tts = TTS()
 llm = Query()
 
 @app.post("/transcribe")

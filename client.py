@@ -6,7 +6,7 @@ import requests
 
 SERVER_URL = "http://100.93.202.120:8000"
 
-def record(samplerate=16000, chunk_duration=0.1, silence_threshold=500, silence_duration=1.5, max_duration=15):
+def record(samplerate=16000, chunk_duration=0.5, silence_threshold=500, silence_duration=1.5, max_duration=15):
     silence_chunks_needed = int(silence_duration / chunk_duration)
     max_chunks = int(max_duration/chunk_duration)
     frames = []
@@ -55,10 +55,10 @@ def speak(text):
 def play_audio(audio_bytes):
     data, samplerate = sf.read(audio_bytes)
     sd.play(data, samplerate)
-    sd.wait
+    sd.wait()
 
 if __name__ == "__main__":
-    buffer = record(chunk_duration=1, silence_duration=2)
+    buffer = record()
     text = transcribe(buffer)
     print(text)
     reply = chat(text)
