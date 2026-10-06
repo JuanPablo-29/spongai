@@ -34,7 +34,7 @@ class SpongeTTS:
         #print(f"Feeding clean text to engine: \"{clean_text}\"")
         
         # Segment via standard sentence limits and pass to Kokoro pipeline
-        generator = self.pipeline(text, voice="af_heart", speed=1.3, split_pattern=r'[.!?\n]+')
+        generator = self.pipeline(text, voice="am_adam", speed=1.3, split_pattern=r'[.!?\n]+')
         
         audio_segments = []
         for _, _, audio in generator:
