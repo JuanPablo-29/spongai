@@ -18,6 +18,8 @@ class SpongeTTS:
         
         # 1. Initialize local Kokoro baseline generator
         self.pipeline = KPipeline(lang_code='a', device=self.device)
+
+        self.pipeline.g2p.lexicon.golds['juan'] = 'wɑn'
         
         # 2. Initialize and configure the local RVC engine
         self.rvc = RVCInference(device=self.device)
@@ -34,19 +36,6 @@ class SpongeTTS:
         Formats text to break the monotone delivery and patches pronunciation bugs.
         """
         processed = text.strip()
-        
-        # --- PHONETIC PRONUNCIATION DICTIONARY ---
-        # Map words that the TTS engine mispronounces to their phonetic equivalents
-        pronunciation_patches = {
-            r"\bJuan\b": "Wahn",     # Forces "Juan" to be pronounced properly as "Wahn"
-            r"\bjuan\b": "Wahn",
-            # You can add other custom names or words here as you run into them:
-            # r"\bFastAPI\b": "Fast A P I",
-        }
-        
-        # Apply the phonetic patches using regex word boundaries
-        for pattern, replacement in pronunciation_patches.items():
-            processed = re.sub(pattern, replacement, processed)
         
         # Clean up punctuation and apply upper-case shouting for energy
         processed = processed.replace(".", "!")
