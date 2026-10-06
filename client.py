@@ -53,7 +53,7 @@ def speak(text):
 
 
 def play_audio(audio_bytes):
-    data, samplerate = sf.read(io.BytesIO(audio_bytes))
+    data, samplerate = sf.read(audio_bytes)
     sd.play(data, samplerate)
     sd.wait
 
