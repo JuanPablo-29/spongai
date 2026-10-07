@@ -3,30 +3,38 @@ import io
 import soundfile as sf
 import numpy as np
 import requests
+import queue
 
 SERVER_URL = "http://100.93.202.120:8000"
 
-def record(samplerate=16000, chunk_duration=0.5, silence_threshold=500, silence_duration=1.5, max_duration=15):
+def record(samplerate=16000, chunk_duration=0.5, silence_threshold=55, silence_duration=1.5, max_duration=15):
+    q = queue.Queue()
+
+    def callback(indata, frames, time_info, status):
+        q.put(indata.copy())
+
     silence_chunks_needed = int(silence_duration / chunk_duration)
-    max_chunks = int(max_duration/chunk_duration)
+    max_chunks = int(max_duration / chunk_duration)
+    blocksize = int(chunk_duration * samplerate)
+
     frames = []
     silent_count = 0
-    for _ in range(max_chunks):
-        chunk = sd.rec(int(chunk_duration*samplerate),samplerate=samplerate, channels=1, dtype="int16")
-        sd.wait()
-        frames.append(chunk)
 
-        volume = np.sqrt(np.mean(chunk.astype(np.float32) ** 2))
+    with sd.InputStream(samplerate=samplerate, channels=1, dtype="int16",
+                         blocksize=blocksize, callback=callback):
+        print("Recording... Speak now.")
+        for _ in range(max_chunks):
+            chunk = q.get()  # blocks until the stream delivers the next full block
+            frames.append(chunk)
+            volume = np.sqrt(np.mean(chunk.astype(np.float32) ** 2))  # same RMS line you already have
+            print(f"Volume: {volume:.2f}")
+            if volume < silence_threshold:
+                silent_count += 1
+            else:
+                silent_count = 0
+            if silent_count >= silence_chunks_needed:
+                break
 
-        print(volume)
-
-        if volume < silence_threshold:
-            silent_count += 1
-        else:
-            silent_count = 0
-
-        if silent_count >= silence_chunks_needed:
-            break
     audio = np.concatenate(frames)
     buffer = io.BytesIO()
     sf.write(buffer, audio, samplerate, format="WAV")
@@ -58,11 +66,15 @@ def play_audio(audio_bytes):
     sd.wait()
 
 if __name__ == "__main__":
-    buffer = record()
-    text = transcribe(buffer)
-    print(text)
-    reply = chat(text)
-    print(reply)
-    audio_bytes = speak(reply)
-    play_audio(audio_bytes)
+    while True:
+        buffer = record()
+        with open("debug_recording.wav", "wb") as f:
+            f.write(buffer.read())
+        buffer.seek(0)
+        text = transcribe(buffer)
+        print(text)
+        reply = chat(text)
+        print(reply)
+        audio_bytes = speak(reply)
+        play_audio(audio_bytes)
     
